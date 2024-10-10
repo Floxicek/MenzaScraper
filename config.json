@@ -1,0 +1,17 @@
+{
+  "canteens": [
+    {
+      "name": "Studentský dům",
+      "id": 2
+    },
+    {
+      "name": "Technická menza",
+      "id": 3
+    },
+    {
+      "name": "Karlovo náměstí",
+      "id": 8
+    }
+  ],
+  "food": ["lasagn", "pizza", "burger", "paprice", "tortil"]
+}

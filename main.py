@@ -2,12 +2,13 @@ import menza_scraper
 from datetime import datetime
 from discord_webhook import DiscordWebhook, DiscordEmbed
 from dotenv import load_dotenv
-import os
+import os, json
 
-fav = ["lasagn", "pizza", "burger", "paprice", "tortil"]
-
-menzy = ["studenstký dům","technická","karlovo nám"]
 load_dotenv()
+
+with open('config.json') as f:
+    config = json.load(f)
+
 
 def send_favorite_food():
     print(f"Fetching food items at {datetime.now()}")
@@ -22,9 +23,9 @@ def send_favorite_food():
         for menu in place:
             for f in menu:
                 # print(f)
-                for fa in fav:
+                for fa in config['food']:
                     if fa in f:
-                        embed.add_embed_field(menzy[i], value=f)
+                        embed.add_embed_field(name=config["canteens"][i]["name"], value=f)
                         is_empty = False
                         break
     if not is_empty:
