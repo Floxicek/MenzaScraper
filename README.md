@@ -24,8 +24,11 @@ MenzaScraper is a small project that notifies you when your favorite food is ava
    pip install -r requirements.txt
    ```
 4. Configure your settings in `config.json`.
+   id of the canteen is clPodsystem=2 in the URL
+   select which food you want to get notified for
 
-5. Add your discord Webhook in `.env`.
+5. Create and add your discord Webhook in `.env`.
+   [how to create a discord webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
    ```.env
    WEBHOOK_URL=https://discord.com/api/webhooks/yoursecretcreds
