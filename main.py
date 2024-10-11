@@ -12,7 +12,10 @@ with open('config.json') as f:
 
 def send_favorite_food():
     print(f"Fetching food items at {datetime.now()}")
-    food = menza_scraper.get_daily_menu([2,3,8])
+    canteens_ids = []
+    for c in config["canteens"]:
+        canteens_ids.append(c["id"])
+    food = menza_scraper.get_daily_menu(canteens_ids)
     
     webhook = DiscordWebhook(url=os.getenv("WEBHOOK_URL"))
     
