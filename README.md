@@ -33,7 +33,7 @@ MenzaScraper is a small project that notifies you when your favorite food is ava
 
 6. Run the scraper:
    ```bash
-   python scraper.py
+   python main.py
    ```
 
 ## Usage
