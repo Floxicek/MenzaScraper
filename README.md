@@ -32,12 +32,16 @@ MenzaScraper is a small project that notifies you when your favorite food is ava
 
    ```.env
    WEBHOOK_URL=https://discord.com/api/webhooks/yoursecretcreds
+   NOTION_TOKEN=1234567890abcdef1234567890abcdef
    ```
 
 6. Run the scraper:
    ```bash
    python main.py
    ```
+
+## Notion setup
+TBA
 
 ## Usage
 
