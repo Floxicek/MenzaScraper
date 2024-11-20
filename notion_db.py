@@ -27,28 +27,40 @@ def update_food(page_id, food: Food):
         properties = page.get("properties", {})
 
         multi_select_property = properties.get("Place", {}).get("multi_select", [])
+        old_counter = properties.get("Counter", {}).get("number", {})
         current_values = [item['name'] for item in multi_select_property]
         
         if food.place in current_values:
-            # print(f"The value '{new_value}' already exists in the multi-select property.")
-            return
-        
-        # Add the current place to the multi-select property
-        
-        notion.pages.update(
-        page_id=page_id,
-        properties={
-            "Place": {
+            notion.pages.update(
+            page_id=page_id,
+            properties={
+                "LastSeen":{
+                    "date":{
+                        "start":str(datetime.now().date())
+                        }
+                },
+                "Frequency":{
+                    "number": old_counter+1
+                }
+            } 
+            )
+        else:
+            notion.pages.update(
+            page_id=page_id,
+            properties={            "Place": {
                 "multi_select": [{"name": value} for value in current_values + [food.place]]
             },
-            "LastSeen":{
-                "date":{
-                    "start":str(datetime.now().date())
-                    }
-            }
-        }
-    )
-        print(f"The value '{food.place}' was added to the multi-select property.")
+                "LastSeen":{
+                    "date":{
+                        "start":str(datetime.now().date())
+                        }
+                },
+                "Frequency":{
+                    "number":old_counter+1
+                }
+            } 
+            )        
+        print(f"'{food.key}' was updated.")
         
         
         
