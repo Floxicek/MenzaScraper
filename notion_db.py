@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from notion_client import Client
 from datetime import datetime
+from menza_scraper import Food
 
 load_dotenv()
 token = os.getenv("NOTION_TOKEN")
@@ -52,46 +53,68 @@ def food_exists(food_name):
         )
         results = response.get("results", [])
         success = len(results) > 0
-        page_id = results[0]
-        print(page_id)
-        if success:
-            update_last_seen(page_id)
+        # page_id = results[0]
+        # print(page_id)
+        # if success:
+        #     update_last_seen(page_id)
         
         return success
     except Exception as e:
         print(f"An error occurred: {e}")
         return False   
 
-
-def add_food(food_name):
-    if food_exists(food_name):
-        print(f"'{food_name}' already exists in the database.")
-        update_last_seen(food_name)
-        
-        return
+def read_db():
     try:
-        response = notion.pages.create(
+        response = notion.databases.query(
             **{
-                "parent": {"database_id":menza_db},
-                "properties": {
-                    "Name": {
-                        "title": [
-                            {
-                                "text": {
-                                    "content": food_name
-                                }
-                            }
-                        ]
-                    },
-                    "Added": {
-                        "date": {
-                            "start": str(datetime.now().date())
-                        }
-                    }
-                }
+                "database_id": menza_db,
             }
         )
-        print(f"Added '{food_name}' to the database.")
+        results = response.get("results", [])
+        for result in results:
+            print(result)
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def add_food(food: Food):
+    if food_exists(food.key):
+        print(f"'{food.key}' already exists in the database.")
+        # update_last_seen(food.name)
+        return
+    try:
+        print(f"adding {food.key}")
+        response = notion.pages.create(
+            **{
+            "parent": {"database_id": menza_db},
+            "properties": {
+                "Name": {
+                "title": [
+                    {
+                    "text": {"content": food.key}
+                    }
+                ]
+                },
+                "Added": {
+                "date": {
+                    "start": str(datetime.now().date())
+                }
+                },
+                "LastSeen":{
+                    "date":{
+                        "start":str(datetime.now().date())
+                    }},
+                "Type": {
+                    "select": {"name": food.type}
+                },
+                "Place":{
+                    "select":{"name": food.place}
+                }
+            }
+            }
+        )
+        print(f"Added '{food.key}' to the database.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+# print(read_db())

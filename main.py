@@ -28,14 +28,14 @@ def send_favorite_food():
     is_empty = True
     
     for cantine in canteens_ids:
-        menu = menza_scraper.get_daily_menu(cantine)
+        menu = menza_scraper.get_from_daily_menu(cantine)
         for food in menu:            
-            notion_db.add_food(f) # if food not in notion database, add it
-            for fa in config['food']:
-                if fa in f:
-                    embed.add_embed_field(name=config["canteens"][i]["name"], value=f)
-                    is_empty = False
-                    break
+            notion_db.add_food(food) # if food not in notion database, add it
+            # for fa in config['food']:
+            #     if fa in f:
+            #         embed.add_embed_field(name=food.place, value=food.name)
+            #         is_empty = False
+            #         break
     if not is_empty:
         webhook.add_embed(embed)
         response = webhook.execute()
