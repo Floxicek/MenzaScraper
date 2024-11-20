@@ -9,6 +9,10 @@ load_dotenv()
 with open('config.json') as f:
     config = json.load(f)
 
+def is_open():
+    day = datetime.now().strftime("%w")
+    return not (day == 0 or day == 6)
+
 
 def send_favorite_food():
     print(f"Fetching food items at {datetime.now()}")
@@ -35,4 +39,6 @@ def send_favorite_food():
         webhook.add_embed(embed)
         response = webhook.execute()
 
-send_favorite_food()
+
+if is_open():
+    send_favorite_food()
