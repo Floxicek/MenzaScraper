@@ -35,9 +35,11 @@ def send_favorite_food():
             #     return          
             notion_db.add_food(food) # if food not in notion database, add it
             # i += 1
-            # for fa in config['food']:
-            embed.add_embed_field(name=food.place, value=food.name)
-            is_empty = False
+            for fa in config['food']:
+                if fa in food.name:
+                    embed.add_embed_field(name=food.place, value=food.name)
+                    is_empty = False
+                    break
     if not is_empty:
         webhook.add_embed(embed)
         response = webhook.execute()
