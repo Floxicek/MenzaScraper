@@ -71,12 +71,12 @@ def get_from_weekly_menu(cousines: list = [3]) -> list:
 
 def get_from_daily_menu(cantine_id = 3) -> list:
     menu = []
-    # url = f"https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem={cantine_id}&lang=cs"
+    url = f"https://agata.suz.cvut.cz/jidelnicky/index.php?clPodsystem={cantine_id}&lang=cs"
 
-    # response = requests.get(url)
-    # html_content = response.text
-    with open('save_websites/technicka.html', 'r', encoding='utf-8') as file:
-        html_content = file.read()
+    response = requests.get(url)
+    html_content = response.text
+    # with open('save_websites/technicka.html', 'r', encoding='utf-8') as file:
+    #     html_content = file.read()
 
     soup = BeautifulSoup(html_content, "html.parser")
     

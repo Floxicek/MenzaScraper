@@ -21,24 +21,42 @@ def get_database_id(database_name="Menza"):
 
 menza_db = get_database_id()
 
-def update_last_seen(page_id):
+def update_food(page_id, food: Food):
     try:
+        page = notion.pages.retrieve(page_id)
+        properties = page.get("properties", {})
+
+        multi_select_property = properties.get("Place", {}).get("multi_select", [])
+        current_values = [item['name'] for item in multi_select_property]
+        
+        if food.place in current_values:
+            # print(f"The value '{new_value}' already exists in the multi-select property.")
+            return
+        
+        # Add the current place to the multi-select property
+        
         notion.pages.update(
-        **{
-            "page_id": page_id,
-            "properties": {
-            "LastSeen": {
-                "date": {
-                "start": str(datetime.now().date())
-                }
-            }
+        page_id=page_id,
+        properties={
+            "Place": {
+                "multi_select": [{"name": value} for value in current_values + [food.place]]
+            },
+            "LastSeen":{
+                "date":{
+                    "start":str(datetime.now().date())
+                    }
             }
         }
     )
+        print(f"The value '{food.place}' was added to the multi-select property.")
+        
+        
+        
     except Exception as e:
         print(f"An error occurred: {e}")
-
-def food_exists(food_name):
+        
+        
+def food_exists(food:Food):
     try:
         response = notion.databases.query(
             **{
@@ -46,22 +64,17 @@ def food_exists(food_name):
                 "filter": {
                     "property": "Name",
                     "title": {
-                        "equals": food_name
+                        "equals": food.key
                     }
                 }
             }
         )
         results = response.get("results", [])
         success = len(results) > 0
-        # page_id = results[0]
-        # print(page_id)
-        # if success:
-        #     update_last_seen(page_id)
-        
-        return success
+        page = results[0]
+        return (success, page["id"])
     except Exception as e:
-        print(f"An error occurred: {e}")
-        return False   
+        return (False, -1)
 
 def read_db():
     try:
@@ -77,44 +90,46 @@ def read_db():
         print(f"An error occurred: {e}")
 
 def add_food(food: Food):
-    if food_exists(food.key):
+    found, id = food_exists(food)
+    if found and not(id == -1):
         print(f"'{food.key}' already exists in the database.")
-        # update_last_seen(food.name)
-        return
-    try:
-        print(f"adding {food.key}")
-        response = notion.pages.create(
-            **{
-            "parent": {"database_id": menza_db},
-            "properties": {
-                "Name": {
-                "title": [
-                    {
-                    "text": {"content": food.key}
+        update_food(id, food)
+    else:
+        try:
+            print(f"adding {food.key}")
+            response = notion.pages.create(
+                **{
+                "parent": {"database_id": menza_db},
+                "properties": {
+                    "Name": {
+                    "title": [
+                        {
+                        "text": {"content": food.key}
+                        }
+                    ]
+                    },
+                    # Added is being done by the notion
+                    # "Added": {
+                    # "date": {
+                    #     "start": str(datetime.now().date())
+                    # }
+                    # }
+                    "LastSeen":{
+                        "date":{
+                            "start":str(datetime.now().date())
+                        }},
+                    "Type": {
+                        "select": {"name": food.type}
+                    },
+                    "Place":{
+                        "multi_select":[{"name": food.place}]
                     }
-                ]
-                },
-                "Added": {
-                "date": {
-                    "start": str(datetime.now().date())
                 }
-                },
-                "LastSeen":{
-                    "date":{
-                        "start":str(datetime.now().date())
-                    }},
-                "Type": {
-                    "select": {"name": food.type}
-                },
-                "Place":{
-                    "select":{"name": food.place}
                 }
-            }
-            }
-        )
-        print(f"Added '{food.key}' to the database.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+            )
+            print(f"Added '{food.key}' to the database.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 
 # print(read_db())

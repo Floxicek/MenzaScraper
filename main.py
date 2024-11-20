@@ -29,8 +29,12 @@ def send_favorite_food():
     
     for cantine in canteens_ids:
         menu = menza_scraper.get_from_daily_menu(cantine)
-        for food in menu:            
+        # i = 0
+        for food in menu:
+            # if i>0:
+            #     return          
             notion_db.add_food(food) # if food not in notion database, add it
+            # i += 1
             # for fa in config['food']:
             #     if fa in f:
             #         embed.add_embed_field(name=food.place, value=food.name)
