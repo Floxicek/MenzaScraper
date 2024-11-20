@@ -135,6 +135,9 @@ def add_food(food: Food):
                     },
                     "Place":{
                         "multi_select":[{"name": food.place}]
+                    },
+                    "Counter":{
+                        "number": 1
                     }
                 }
                 }
