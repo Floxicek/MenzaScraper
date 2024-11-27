@@ -39,7 +39,7 @@ def update_food(page_id, food: Food):
                         "start":str(datetime.now().date())
                         }
                 },
-                "Frequency":{
+                "Counter":{
                     "number": old_counter+1
                 }
             } 
@@ -55,7 +55,7 @@ def update_food(page_id, food: Food):
                         "start":str(datetime.now().date())
                         }
                 },
-                "Frequency":{
+                "Counter":{
                     "number":old_counter+1
                 }
             } 
