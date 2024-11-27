@@ -9,7 +9,12 @@ class Food:
         "Polévky": "Soup",
         "Vegetariánská jídla": "Vegetarian",
         "Minutky": "Quick",
-        "Moučníky": "Dessert"
+        "Minutka": "Quick",
+        "Moučníky": "Dessert",
+        "Studená jídla": "Cold",
+        "Specialita dne": "Special",
+        "Bezmasá jídla": "Vegetarian",
+        "Saláty a talíře": "Salad",
     }
     
     
@@ -18,6 +23,9 @@ class Food:
         self.type = Food.translation.get(type, type)
         self.place = place
         self.key = re.split("/|,|-", name)[0] # Key to merge food with different side dishes
+        
+        if self.key == "CHLAZENÝ PULT ":
+            self.key = re.split("/|,|-", name)[1]
     
         if last_seen_now:
             self.last_seen = datetime.now().date()
