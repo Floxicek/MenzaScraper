@@ -23,7 +23,7 @@ def send_favorite_food():
     
     webhook = DiscordWebhook(url=os.getenv("WEBHOOK_URL"))
     
-    embed = DiscordEmbed(title=f"{datetime.now().strftime("%c")}", color="AAFF00")
+    embed = DiscordEmbed(title=f"{datetime.now().strftime('%c')}", color="AAFF00")
     embed.set_timestamp()
     is_empty = True
     
