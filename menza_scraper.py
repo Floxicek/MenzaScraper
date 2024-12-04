@@ -8,6 +8,7 @@ class Food:
         "Hlavní jídla": "Main",
         "Polévky": "Soup",
         "Vegetariánská jídla": "Vegetarian",
+        "Veganská jídla": "Vegan",
         "Minutky": "Quick",
         "Minutka": "Quick",
         "Moučníky": "Dessert",
